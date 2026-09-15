@@ -29,7 +29,7 @@
     <strong>Recopilación del chat.</strong> Estas son las propuestas concretas que ya habían salido en WhatsApp, organizadas por tema. Toca una tarjeta para ver cada una.
     <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
   </div>
-  <div class="intro-card" id="intro-formulario" style="display:none;">
+  <div class="intro-card intro-form" id="intro-formulario" style="display:none;">
     <strong>Lo que siguen enviando los propietarios.</strong> Cada vez que alguien llena el formulario, aparece aquí automáticamente. Esto es aparte de la recopilación del chat.
     <p class="intro-actions"><a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Enviar mi propuesta →</a></p>
   </div>
@@ -49,11 +49,20 @@
   </div>
 
   <div id="formulario-view" style="display:none;">
-    <div class="section-title">📩 Ideas nuevas del formulario</div>
-    <p class="section-sub" id="form-status">Cargando desde Google Sheets…</p>
-    <div id="form-results"></div>
+    <div class="form-hero">
+      <div class="form-hero-top">
+        <div>
+          <div class="section-title">📩 Ideas nuevas del formulario</div>
+          <p class="section-sub" id="form-status">Cargando desde Google Sheets…</p>
+        </div>
+        <a class="btn-link btn-primary form-hero-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">+ Enviar idea</a>
+      </div>
+    </div>
+    <div id="form-results" class="form-feed"></div>
     <div class="cta-form">
-      <p>¿Quieres agregar tu idea?</p>
+      <div class="cta-form-emoji">✍️</div>
+      <h3>¿Falta tu voz?</h3>
+      <p>Si tienes una idea o necesidad para la próxima administración, envíala en 1 minuto.</p>
       <a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Abrir formulario de propuestas →</a>
     </div>
   </div>
@@ -271,38 +280,83 @@ function applySearch() {
     filtered.map(currentTab === 'quejas' ? quejaBubble : propuestaBubble).join('');
 }
 
-function formBubble(item) {
+function initialsFrom(name) {
+  const parts = String(name || 'V').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'V';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function avatarColor(name) {
+  const palette = ['#1f3864', '#e0662a', '#1f8a70', '#2e5395', '#b9770e', '#2471a3'];
+  let hash = 0;
+  const s = String(name || '');
+  for (let i = 0; i < s.length; i++) hash = (hash + s.charCodeAt(i) * (i + 1)) % palette.length;
+  return palette[hash];
+}
+
+function formBubble(item, idx, total) {
+  const quien = item.quien || 'Vecino/a';
+  const color = avatarColor(quien);
   return `
-    <div class="item-bubble form-bubble">
+    <article class="form-card" style="--delay:${Math.min(idx, 8) * 40}ms; --accent:${color}">
+      <header class="form-card-head">
+        <div class="form-avatar" style="background:${color}">${escapeHtml(initialsFrom(quien))}</div>
+        <div class="form-card-who">
+          <strong>${escapeHtml(quien)}</strong>
+          <span>${escapeHtml(item.fecha || '')}</span>
+        </div>
+        <span class="form-card-num">#${total - idx}</span>
+      </header>
       <div class="form-text">${escapeHtml(item.propuesta).replace(/\n/g, '<br>')}</div>
-      <div class="meta">
-        <span>🙋 ${escapeHtml(item.quien || 'Vecino/a')}</span>
-        <span>📅 ${escapeHtml(item.fecha)}</span>
-      </div>
-    </div>`;
+    </article>`;
 }
 
 function renderFormulario(rows) {
   const status = document.getElementById('form-status');
   const box = document.getElementById('form-results');
   if (!rows || rows.length === 0) {
-    status.textContent = 'Todavía no hay respuestas en la hoja de prueba.';
-    box.innerHTML = '';
+    status.innerHTML = 'Todavía no hay respuestas en el formulario.';
+    box.innerHTML = `
+      <div class="form-empty">
+        <div class="form-empty-emoji">📭</div>
+        <p>Sé el primero en enviar una idea para la nueva directiva.</p>
+      </div>`;
     return;
   }
-  status.innerHTML = `<span class="live-badge">EN VIVO</span> ${rows.length} respuesta${rows.length === 1 ? '' : 's'} desde Google Sheets`;
-  box.innerHTML = rows.map(formBubble).join('');
+  status.innerHTML = `<span class="live-badge">EN VIVO</span> <strong>${rows.length}</strong> respuesta${rows.length === 1 ? '' : 's'} · se actualiza sola`;
+  box.innerHTML = rows.map((row, idx) => formBubble(row, idx, rows.length)).join('');
 }
 
 async function showFormulario() {
   document.getElementById('form-status').textContent = 'Cargando desde Google Sheets…';
-  document.getElementById('form-results').innerHTML = '';
+  document.getElementById('form-results').innerHTML = `
+    <div class="form-card form-skeleton">
+      <div class="sk sk-avatar"></div>
+      <div class="sk-lines">
+        <div class="sk sk-line short"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
+      </div>
+    </div>
+    <div class="form-card form-skeleton">
+      <div class="sk sk-avatar"></div>
+      <div class="sk-lines">
+        <div class="sk sk-line short"></div>
+        <div class="sk sk-line"></div>
+      </div>
+    </div>`;
   try {
     FORM_ROWS = await loadSheetResponses();
     renderFormulario(FORM_ROWS);
   } catch (e) {
     document.getElementById('form-status').textContent =
       'No se pudo leer la hoja. Revisa que siga compartida como “Cualquiera con el enlace → Lector”.';
+    document.getElementById('form-results').innerHTML = `
+      <div class="form-empty">
+        <div class="form-empty-emoji">⚠️</div>
+        <p>No se pudo cargar el formulario en vivo. Intenta refrescar en un momento.</p>
+      </div>`;
   }
 }
 
