@@ -3,115 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CL-Serena Propietarios — Quejas y Propuestas</title>
-<meta name="description" content="Recopilación organizada de quejas y propuestas del chat de vecinos de la Etapa Serena, Urb. Casa Laguna.">
+<title>Etapa Serena — ¿Qué nos molesta y qué proponemos?</title>
+<meta name="description" content="Un vistazo fácil a las quejas y propuestas de los vecinos de la Etapa Serena, Urb. Casa Laguna.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏘️</text></svg>">
 </head>
 <body>
 <header class="site-header">
-  <h1>🏘️ Etapa Serena — Quejas y Propuestas</h1>
-  <p>Recopilación organizada del chat de vecinos · Urb. Casa Laguna · junio–septiembre 2026</p>
+  <span class="emoji-big">🏘️</span>
+  <h1>¿Qué nos molesta en Serena? ¿Qué proponemos?</h1>
+  <p>Todo lo que hemos hablado en el chat de vecinos, organizado y en español sencillo — para que en dos minutos sepas de qué se trata.</p>
   <nav class="tabs">
-    <a href="index.html" class="active">Inicio</a>
-    <a href="#" id="tab-quejas">Quejas</a>
-    <a href="#" id="tab-propuestas">Propuestas</a>
-    <a href="votar.html">🗳️ Votar propuestas</a>
+    <button id="tab-quejas" class="active">😤 Quejas</button>
+    <button id="tab-propuestas">💡 Propuestas</button>
+    <a href="votar.html">🗳️ Votar</a>
   </nav>
 </header>
 
 <main>
-  <div class="intro-card">
-    <p><strong>¿Qué es esto?</strong> El grupo de WhatsApp acumuló más de 1,600 mensajes de quejas y propuestas sin ningún orden. Esta página organiza todo ese contenido para que sea fácil de revisar antes de las reuniones del 15 y 20 de septiembre de 2026.</p>
-    <p>Usa las pestañas para ver las <strong>quejas</strong> reportadas o las <strong>propuestas</strong> para la nueva directiva. Cuando quieras priorizar las propuestas, ve a <a href="votar.html">Votar propuestas</a> — los resultados se pueden exportar a Excel.</p>
+  <div class="intro-card" id="intro-quejas">
+    <strong>¿Qué es esto?</strong> Entre todos hemos escrito más de 1,600 mensajes quejándonos de cosas distintas, pero desordenados es difícil verle la foto completa. Aquí están agrupados por tema — toca cualquier tarjeta para ver el detalle. Los temas con más 🔥 son los que más vecinos han mencionado.
+  </div>
+  <div class="intro-card" id="intro-propuestas" style="display:none;">
+    <strong>Ideas para la nueva directiva.</strong> Estas son las propuestas concretas que ya han salido en el chat. Revísalas y luego ve a <a href="votar.html"><strong>Votar</strong></a> para decirnos cuáles te importan más.
   </div>
 
-  <div class="stats-row" id="stats-row"></div>
+  <div class="section-title" id="main-title">😤 ¿Qué es lo que más nos molesta?</div>
+  <p class="section-sub" id="main-sub">Toca un tema para ver los detalles</p>
 
-  <div class="controls">
-    <input type="text" id="search" placeholder="Buscar por palabra clave…">
-    <select id="filter-cat"></select>
+  <div class="cat-grid" id="cat-grid"></div>
+
+  <div id="detail-area" style="margin-top: 22px;"></div>
+
+  <div class="search-row">
+    <input type="text" id="search" placeholder="🔎 O busca una palabra clave (ej: agua, mosquitos, garita)…">
   </div>
+  <div id="search-results"></div>
 
-  <div id="results"></div>
+  <div class="cta-box">
+    <h3>🗳️ ¿Ya viste todo? ¡Ayúdanos a priorizar!</h3>
+    <p>Vota qué propuestas te parecen más urgentes para llevarlas a la reunión con la administración.</p>
+    <a class="btn" href="votar.html">Ir a votar →</a>
+  </div>
 </main>
 
+<a href="votar.html" class="vote-fab">🗳️ Votar</a>
+
 <footer>
-  Recopilación generada a partir del chat "CL-SERENA PROPIETARIOS" · Este sitio es una herramienta informal de organización vecinal, no un canal oficial de la administración.
+  Recopilación hecha por vecinos a partir del chat "CL-SERENA PROPIETARIOS" · Herramienta informal de organización vecinal, no es un canal oficial de la administración.
 </footer>
 
+<script src="categorias.js"></script>
 <script src="data.json" type="application/json" id="raw-data"></script>
 <script>
 let DATA = null;
-let currentTab = 'propuestas';
+let currentTab = 'quejas';
+let openCategory = null;
 
 async function loadData() {
   try {
     const res = await fetch('data.json');
     DATA = await res.json();
   } catch (e) {
-    // fallback for file:// usage without a server
     DATA = JSON.parse(document.getElementById('raw-data').textContent || '{}');
   }
   render();
 }
 
-function freqClass(freq) {
-  if (!freq) return 'freq-baja';
+function groupByCategory(items) {
+  const map = {};
+  items.forEach(it => {
+    if (!map[it.categoria]) map[it.categoria] = [];
+    map[it.categoria].push(it);
+  });
+  return map;
+}
+
+function freqRank(freq) {
+  if (!freq) return 0;
   const f = freq.toLowerCase();
-  if (f.includes('muy')) return 'freq-muy';
-  if (f.includes('alta')) return 'freq-alta';
-  if (f.includes('media')) return 'freq-media';
-  return 'freq-baja';
+  if (f.includes('muy')) return 3;
+  if (f.includes('alta')) return 2;
+  if (f.includes('media')) return 1;
+  return 0;
 }
 
-function renderStats() {
-  const q = DATA.quejas, p = DATA.propuestas;
-  const catsQ = new Set(q.map(x => x.categoria)).size;
-  const catsP = new Set(p.map(x => x.categoria)).size;
-  document.getElementById('stats-row').innerHTML = `
-    <div class="stat"><div class="num">${q.length}</div><div class="label">Quejas organizadas</div></div>
-    <div class="stat"><div class="num">${catsQ}</div><div class="label">Categorías de quejas</div></div>
-    <div class="stat"><div class="num">${p.length}</div><div class="label">Propuestas recopiladas</div></div>
-    <div class="stat"><div class="num">${catsP}</div><div class="label">Categorías de propuestas</div></div>
-  `;
-}
-
-function populateCatFilter() {
-  const sel = document.getElementById('filter-cat');
+function renderCatGrid() {
   const items = currentTab === 'quejas' ? DATA.quejas : DATA.propuestas;
-  const cats = [...new Set(items.map(x => x.categoria))].sort();
-  sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+  const groups = groupByCategory(items);
+  const cats = Object.keys(groups);
+
+  cats.sort((a, b) => {
+    if (currentTab === 'quejas') {
+      const ra = Math.max(...groups[a].map(x => freqRank(x.frecuencia)));
+      const rb = Math.max(...groups[b].map(x => freqRank(x.frecuencia)));
+      if (rb !== ra) return rb - ra;
+    }
+    return groups[b].length - groups[a].length;
+  });
+
+  const grid = document.getElementById('cat-grid');
+  grid.innerHTML = cats.map(cat => {
+    const info = catInfo(cat, currentTab);
+    const group = groups[cat];
+    const topFlame = currentTab === 'quejas'
+      ? flamesFor(group.reduce((a, b) => freqRank(a) > freqRank(b.frecuencia) ? a : b.frecuencia, group[0].frecuencia))
+      : '';
+    return `
+      <div class="cat-card" style="--cat-color:${info.color}" data-cat="${encodeURIComponent(cat)}">
+        <span class="count-pill">${group.length}</span>
+        <span class="emoji">${info.emoji}</span>
+        <h3>${info.titulo}</h3>
+        ${currentTab === 'quejas' ? `<div class="flames">${topFlame}</div>` : `<div class="flames" style="color:var(--text-muted); font-size:0.82rem;">${group.length} propuesta${group.length>1?'s':''}</div>`}
+      </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.cat-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const cat = decodeURIComponent(card.dataset.cat);
+      openCategory = (openCategory === cat) ? null : cat;
+      renderDetail(groups);
+      if (openCategory) {
+        document.getElementById('detail-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  renderDetail(groups);
 }
 
-function renderQuejaCard(item) {
+function quejaBubble(item) {
   return `
-    <div class="card">
-      <div class="card-top">
-        <span class="card-id">${item.id}</span>
-        <div>
-          <span class="badge cat">${item.categoria}</span>
-          <span class="badge ${freqClass(item.frecuencia)}">${item.frecuencia}</span>
-        </div>
-      </div>
-      <h3>${item.resumen}</h3>
-      ${item.cita ? `<div class="cita">${item.cita}</div>` : ''}
+    <div class="item-bubble">
+      <div>${item.resumen}</div>
+      ${item.cita ? `<div class="quote">${item.cita}</div>` : ''}
       <div class="meta">
-        <span>📅 Primera mención: ${item.fecha}</span>
+        <span>📅 ${item.fecha}</span>
         <span>📍 ${item.mz}</span>
+        <span>${flamesFor(item.frecuencia)} ${flameLabel(item.frecuencia)}</span>
       </div>
     </div>`;
 }
 
-function renderPropuestaCard(item) {
+function propuestaBubble(item) {
   return `
-    <div class="card">
-      <div class="card-top">
-        <span class="card-id">${item.id}</span>
-        <span class="badge cat">${item.categoria}</span>
-      </div>
-      <h3>${item.propuesta}</h3>
-      ${item.detalle ? `<div class="detail">${item.detalle}</div>` : ''}
+    <div class="item-bubble">
+      <div><strong>${item.propuesta}</strong></div>
+      ${item.detalle ? `<div class="prop-detail">${item.detalle}</div>` : ''}
       <div class="meta">
         <span>🙋 ${item.quien}</span>
         <span>📅 ${item.fecha}</span>
@@ -119,49 +157,61 @@ function renderPropuestaCard(item) {
     </div>`;
 }
 
-function render() {
-  renderStats();
-  populateCatFilter();
-  applyFilters();
-}
-
-function applyFilters() {
-  const term = document.getElementById('search').value.trim().toLowerCase();
-  const cat = document.getElementById('filter-cat').value;
-  const items = currentTab === 'quejas' ? DATA.quejas : DATA.propuestas;
-  const filtered = items.filter(x => {
-    const text = JSON.stringify(x).toLowerCase();
-    const matchesTerm = !term || text.includes(term);
-    const matchesCat = !cat || x.categoria === cat;
-    return matchesTerm && matchesCat;
-  });
-  const container = document.getElementById('results');
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-msg">No se encontraron resultados.</div>';
+function renderDetail(groups) {
+  const area = document.getElementById('detail-area');
+  if (!openCategory || !groups[openCategory]) {
+    area.innerHTML = '';
     return;
   }
-  container.innerHTML = `<div class="section-title">${currentTab === 'quejas' ? '📋 Quejas reportadas' : '💡 Propuestas para la nueva directiva'} (${filtered.length})</div>` +
-    filtered.map(currentTab === 'quejas' ? renderQuejaCard : renderPropuestaCard).join('');
+  const info = catInfo(openCategory, currentTab);
+  const group = groups[openCategory];
+  const bubbles = group.map(currentTab === 'quejas' ? quejaBubble : propuestaBubble).join('');
+  area.innerHTML = `
+    <div class="cat-detail open">
+      <div class="cat-detail-header" style="--cat-color:${info.color}">
+        <span class="emoji">${info.emoji}</span>
+        <h3>${info.titulo} (${group.length})</h3>
+        <span class="chev">▾</span>
+      </div>
+      <div class="cat-detail-body">${bubbles}</div>
+    </div>`;
 }
 
-document.getElementById('tab-quejas').addEventListener('click', (e) => {
-  e.preventDefault();
-  currentTab = 'quejas';
-  setActiveTab(e.target);
-  render();
-});
-document.getElementById('tab-propuestas').addEventListener('click', (e) => {
-  e.preventDefault();
-  currentTab = 'propuestas';
-  setActiveTab(e.target);
-  render();
-});
-function setActiveTab(el) {
-  document.querySelectorAll('nav.tabs a').forEach(a => a.classList.remove('active'));
-  el.classList.add('active');
+function applySearch() {
+  const term = document.getElementById('search').value.trim().toLowerCase();
+  const results = document.getElementById('search-results');
+  if (!term) { results.innerHTML = ''; return; }
+  const items = currentTab === 'quejas' ? DATA.quejas : DATA.propuestas;
+  const filtered = items.filter(x => JSON.stringify(x).toLowerCase().includes(term));
+  if (filtered.length === 0) {
+    results.innerHTML = '<div class="empty-msg">No se encontró nada con esa palabra.</div>';
+    return;
+  }
+  results.innerHTML = `<div class="section-title" style="font-size:1.05rem;">Resultados para "${term}" (${filtered.length})</div>` +
+    filtered.map(currentTab === 'quejas' ? quejaBubble : propuestaBubble).join('');
 }
-document.getElementById('search').addEventListener('input', applyFilters);
-document.getElementById('filter-cat').addEventListener('change', applyFilters);
+
+function switchTab(tab) {
+  currentTab = tab;
+  openCategory = null;
+  document.getElementById('tab-quejas').classList.toggle('active', tab === 'quejas');
+  document.getElementById('tab-propuestas').classList.toggle('active', tab === 'propuestas');
+  document.getElementById('intro-quejas').style.display = tab === 'quejas' ? '' : 'none';
+  document.getElementById('intro-propuestas').style.display = tab === 'propuestas' ? '' : 'none';
+  document.getElementById('main-title').textContent = tab === 'quejas' ? '😤 ¿Qué es lo que más nos molesta?' : '💡 ¿Qué proponemos para la nueva directiva?';
+  document.getElementById('main-sub').textContent = tab === 'quejas' ? 'Toca un tema para ver los detalles' : 'Toca un tema para ver las propuestas concretas';
+  document.getElementById('search').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  renderCatGrid();
+}
+
+document.getElementById('tab-quejas').addEventListener('click', () => switchTab('quejas'));
+document.getElementById('tab-propuestas').addEventListener('click', () => switchTab('propuestas'));
+document.getElementById('search').addEventListener('input', applySearch);
+
+function render() {
+  renderCatGrid();
+}
 
 loadData();
 </script>
