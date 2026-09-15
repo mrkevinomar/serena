@@ -87,6 +87,7 @@
 </footer>
 
 <script src="categorias.js"></script>
+<script src="matches.js"></script>
 <script src="data.json" type="application/json" id="raw-data"></script>
 <script>
 // Documento de prueba (cambiar este ID cuando usen la hoja real)
@@ -273,16 +274,36 @@ function renderCatGrid() {
   renderDetail(groups);
 }
 
+function findById(list, id) {
+  return (list || []).find((x) => x.id === id);
+}
+
+function matchChips(ids, kind) {
+  if (!ids || !ids.length) return '';
+  const list = kind === 'propuesta' ? (DATA_BASE?.propuestas || DATA?.propuestas || []) : (DATA_BASE?.quejas || DATA?.quejas || []);
+  const label = kind === 'propuesta' ? '💡 Responde con' : '😤 Atiende a';
+  const chips = ids.map((id) => {
+    const item = findById(list, id);
+    if (!item) return '';
+    const text = kind === 'propuesta' ? item.propuesta : item.resumen;
+    const title = shortTitle(text, 56);
+    return `<button type="button" class="match-chip" data-kind="${kind}" data-id="${escapeHtml(id)}" title="${escapeHtml(text)}">${escapeHtml(id)} · ${escapeHtml(title)}</button>`;
+  }).filter(Boolean).join('');
+  if (!chips) return '';
+  return `<div class="match-row"><span class="match-label">${label}</span><div class="match-chips">${chips}</div></div>`;
+}
+
 function quejaBubble(item) {
   return `
-    <div class="item-bubble">
-      <div>${item.resumen}</div>
-      ${item.cita ? `<div class="quote">${item.cita}</div>` : ''}
+    <div class="item-bubble" id="item-${escapeHtml(item.id)}">
+      <div>${escapeHtml(item.resumen)}</div>
+      ${item.cita ? `<div class="quote">${escapeHtml(item.cita)}</div>` : ''}
       <div class="meta">
-        <span>📅 ${item.fecha}</span>
-        <span>📍 ${item.mz}</span>
+        <span>📅 ${escapeHtml(item.fecha)}</span>
+        <span>📍 ${escapeHtml(item.mz)}</span>
         <span>${flamesFor(item.frecuencia)} ${flameLabel(item.frecuencia)}</span>
       </div>
+      ${matchChips(relatedPropuestasFor(item.id), 'propuesta')}
     </div>`;
 }
 
@@ -291,7 +312,7 @@ function propuestaBubble(item) {
   const body = fromForm ? (item.detalle || item.propuesta) : item.propuesta;
   const extra = (!fromForm && item.detalle) ? item.detalle : '';
   return `
-    <div class="item-bubble${fromForm ? ' from-form' : ''}">
+    <div class="item-bubble${fromForm ? ' from-form' : ''}" id="item-${escapeHtml(item.id)}">
       <div>
         ${fromForm ? '' : `<strong>${escapeHtml(body)}</strong>`}
         ${fromForm ? `<div class="form-inline-text">${escapeHtml(body).replace(/\n/g, '<br>')}</div>` : ''}
@@ -302,6 +323,7 @@ function propuestaBubble(item) {
         <span>🙋 ${escapeHtml(item.quien)}</span>
         <span>📅 ${escapeHtml(item.fecha)}</span>
       </div>
+      ${fromForm ? '' : matchChips(relatedQuejasFor(item.id), 'queja')}
     </div>`;
 }
 
@@ -323,6 +345,35 @@ function renderDetail(groups) {
       </div>
       <div class="cat-detail-body">${bubbles}</div>
     </div>`;
+
+  area.querySelectorAll('.match-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const kind = chip.dataset.kind;
+      const id = chip.dataset.id;
+      jumpToRelated(kind, id);
+    });
+  });
+}
+
+function jumpToRelated(kind, id) {
+  const targetTab = kind === 'propuesta' ? 'propuestas' : 'quejas';
+  const list = targetTab === 'propuestas' ? DATA.propuestas : DATA.quejas;
+  const item = findById(list, id);
+  if (!item) return;
+
+  if (currentTab !== targetTab) switchTab(targetTab);
+
+  openCategory = item.categoria;
+  renderCatGrid();
+
+  requestAnimationFrame(() => {
+    const el = document.getElementById(`item-${id}`);
+    if (el) {
+      el.classList.add('match-flash');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => el.classList.remove('match-flash'), 1600);
+    }
+  });
 }
 
 function applySearch() {
@@ -338,6 +389,11 @@ function applySearch() {
   }
   results.innerHTML = `<div class="section-title" style="font-size:1.05rem;">Resultados para "${term}" (${filtered.length})</div>` +
     filtered.map(currentTab === 'quejas' ? quejaBubble : propuestaBubble).join('');
+  results.querySelectorAll('.match-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      jumpToRelated(chip.dataset.kind, chip.dataset.id);
+    });
+  });
 }
 
 function initialsFrom(name) {
