@@ -16,6 +16,7 @@
   <nav class="tabs">
     <button id="tab-quejas" class="active">😤 Quejas</button>
     <button id="tab-propuestas">💡 Propuestas</button>
+    <button id="tab-formulario">📩 Formulario <span class="live-dot" title="En vivo desde Google Sheets"></span></button>
   </nav>
 </header>
 
@@ -26,18 +27,29 @@
   <div class="intro-card" id="intro-propuestas" style="display:none;">
     <strong>Ideas para la nueva directiva.</strong> Estas son las propuestas concretas que ya han salido en el chat. Toca un tema para ver el detalle de cada una.
   </div>
-
-  <div class="section-title" id="main-title">😤 ¿Qué es lo que más nos molesta?</div>
-  <p class="section-sub" id="main-sub">Toca un tema para ver los detalles</p>
-
-  <div class="cat-grid" id="cat-grid"></div>
-
-  <div id="detail-area" style="margin-top: 22px;"></div>
-
-  <div class="search-row">
-    <input type="text" id="search" placeholder="🔎 O busca una palabra clave (ej: agua, mosquitos, garita)…">
+  <div class="intro-card" id="intro-formulario" style="display:none;">
+    <strong>Ideas nuevas del formulario.</strong> Esto se actualiza solo desde la hoja de Google Sheets cuando un vecino envía su respuesta. Ahora mismo está conectado al documento de prueba.
   </div>
-  <div id="search-results"></div>
+
+  <div id="catalog-view">
+    <div class="section-title" id="main-title">😤 ¿Qué es lo que más nos molesta?</div>
+    <p class="section-sub" id="main-sub">Toca un tema para ver los detalles</p>
+
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <div id="detail-area" style="margin-top: 22px;"></div>
+
+    <div class="search-row">
+      <input type="text" id="search" placeholder="🔎 O busca una palabra clave (ej: agua, mosquitos, garita)…">
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <div id="formulario-view" style="display:none;">
+    <div class="section-title">📩 Lo que van escribiendo los vecinos</div>
+    <p class="section-sub" id="form-status">Cargando desde Google Sheets…</p>
+    <div id="form-results"></div>
+  </div>
 </main>
 
 <footer>
@@ -47,9 +59,23 @@
 <script src="categorias.js"></script>
 <script src="data.json" type="application/json" id="raw-data"></script>
 <script>
+// Documento de prueba (cambiar este ID cuando usen la hoja real)
+const SHEET_ID = '15Rf8thRWI6DyZUoOto7EwOOB8UHQ88yn0wGGPQM0TgY';
+const SHEET_GID = '0';
+
 let DATA = null;
+let FORM_ROWS = null;
 let currentTab = 'quejas';
 let openCategory = null;
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 async function loadData() {
   try {
@@ -59,6 +85,58 @@ async function loadData() {
     DATA = JSON.parse(document.getElementById('raw-data').textContent || '{}');
   }
   render();
+}
+
+function cellText(cell) {
+  if (!cell) return '';
+  if (cell.f != null && cell.f !== '') return String(cell.f);
+  if (cell.v == null) return '';
+  return String(cell.v);
+}
+
+function parseGviz(resp) {
+  if (!resp || resp.status !== 'ok' || !resp.table) return [];
+  const rows = resp.table.rows || [];
+  return rows.map((row, idx) => {
+    const c = row.c || [];
+    return {
+      id: 'F' + (idx + 1),
+      fecha: cellText(c[0]),
+      quien: cellText(c[1]),
+      propuesta: cellText(c[2]).trim()
+    };
+  }).filter(r => r.propuesta).reverse();
+}
+
+function loadSheetResponses() {
+  return new Promise((resolve, reject) => {
+    const cbName = '__serenaSheetCb_' + Date.now();
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('timeout'));
+    }, 15000);
+
+    function cleanup() {
+      clearTimeout(timeout);
+      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function (resp) {
+      cleanup();
+      try { resolve(parseGviz(resp)); }
+      catch (e) { reject(e); }
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('No se pudo cargar la hoja'));
+    };
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+      '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&gid=' + SHEET_GID;
+    document.body.appendChild(script);
+  });
 }
 
 function groupByCategory(items) {
@@ -172,6 +250,7 @@ function applySearch() {
   const term = document.getElementById('search').value.trim().toLowerCase();
   const results = document.getElementById('search-results');
   if (!term) { results.innerHTML = ''; return; }
+  if (currentTab === 'formulario') return;
   const items = currentTab === 'quejas' ? DATA.quejas : DATA.propuestas;
   const filtered = items.filter(x => JSON.stringify(x).toLowerCase().includes(term));
   if (filtered.length === 0) {
@@ -182,22 +261,72 @@ function applySearch() {
     filtered.map(currentTab === 'quejas' ? quejaBubble : propuestaBubble).join('');
 }
 
+function formBubble(item) {
+  return `
+    <div class="item-bubble form-bubble">
+      <div class="form-text">${escapeHtml(item.propuesta).replace(/\n/g, '<br>')}</div>
+      <div class="meta">
+        <span>🙋 ${escapeHtml(item.quien || 'Vecino/a')}</span>
+        <span>📅 ${escapeHtml(item.fecha)}</span>
+      </div>
+    </div>`;
+}
+
+function renderFormulario(rows) {
+  const status = document.getElementById('form-status');
+  const box = document.getElementById('form-results');
+  if (!rows || rows.length === 0) {
+    status.textContent = 'Todavía no hay respuestas en la hoja de prueba.';
+    box.innerHTML = '';
+    return;
+  }
+  status.innerHTML = `<span class="live-badge">EN VIVO</span> ${rows.length} respuesta${rows.length === 1 ? '' : 's'} desde Google Sheets`;
+  box.innerHTML = rows.map(formBubble).join('');
+}
+
+async function showFormulario() {
+  document.getElementById('form-status').textContent = 'Cargando desde Google Sheets…';
+  document.getElementById('form-results').innerHTML = '';
+  try {
+    FORM_ROWS = await loadSheetResponses();
+    renderFormulario(FORM_ROWS);
+  } catch (e) {
+    document.getElementById('form-status').textContent =
+      'No se pudo leer la hoja. Revisa que siga compartida como “Cualquiera con el enlace → Lector”.';
+  }
+}
+
 function switchTab(tab) {
   currentTab = tab;
   openCategory = null;
   document.getElementById('tab-quejas').classList.toggle('active', tab === 'quejas');
   document.getElementById('tab-propuestas').classList.toggle('active', tab === 'propuestas');
+  document.getElementById('tab-formulario').classList.toggle('active', tab === 'formulario');
   document.getElementById('intro-quejas').style.display = tab === 'quejas' ? '' : 'none';
   document.getElementById('intro-propuestas').style.display = tab === 'propuestas' ? '' : 'none';
-  document.getElementById('main-title').textContent = tab === 'quejas' ? '😤 ¿Qué es lo que más nos molesta?' : '💡 ¿Qué proponemos para la nueva directiva?';
-  document.getElementById('main-sub').textContent = tab === 'quejas' ? 'Toca un tema para ver los detalles' : 'Toca un tema para ver las propuestas concretas';
+  document.getElementById('intro-formulario').style.display = tab === 'formulario' ? '' : 'none';
+  document.getElementById('catalog-view').style.display = tab === 'formulario' ? 'none' : '';
+  document.getElementById('formulario-view').style.display = tab === 'formulario' ? '' : 'none';
   document.getElementById('search').value = '';
   document.getElementById('search-results').innerHTML = '';
+
+  if (tab === 'formulario') {
+    showFormulario();
+    return;
+  }
+
+  document.getElementById('main-title').textContent = tab === 'quejas'
+    ? '😤 ¿Qué es lo que más nos molesta?'
+    : '💡 ¿Qué proponemos para la nueva directiva?';
+  document.getElementById('main-sub').textContent = tab === 'quejas'
+    ? 'Toca un tema para ver los detalles'
+    : 'Toca un tema para ver las propuestas concretas';
   renderCatGrid();
 }
 
 document.getElementById('tab-quejas').addEventListener('click', () => switchTab('quejas'));
 document.getElementById('tab-propuestas').addEventListener('click', () => switchTab('propuestas'));
+document.getElementById('tab-formulario').addEventListener('click', () => switchTab('formulario'));
 document.getElementById('search').addEventListener('input', applySearch);
 
 function render() {
