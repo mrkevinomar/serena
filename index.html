@@ -17,6 +17,7 @@
     <button id="tab-quejas" class="active">😤 Quejas del chat</button>
     <button id="tab-propuestas">💡 Propuestas del chat</button>
     <button id="tab-formulario">📩 Nuevas del formulario <span class="live-dot" title="En vivo desde Google Sheets"></span></button>
+    <a href="listas.html">🗳️ Listas</a>
   </nav>
 </header>
 
@@ -434,7 +435,7 @@ function switchTab(tab) {
     : '💡 ¿Qué proponemos para la nueva directiva?';
   document.getElementById('main-sub').textContent = tab === 'quejas'
     ? 'Desde el chat de WhatsApp · toca un tema para ver los detalles'
-    : 'Desde el chat de WhatsApp · toca un tema para ver las propuestas concretas';
+    : 'Chat + formulario en vivo · toca un tema para ver las propuestas';
   renderCatGrid();
 }
 

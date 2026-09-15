@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listas para la directiva — Etapa Serena</title>
+<meta name="description" content="Vitrina pública de listas que se están formando para la nueva directiva de Etapa Serena.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗳️</text></svg>">
+</head>
+<body>
+<header class="site-header">
+  <span class="emoji-big">🗳️</span>
+  <h1>Listas para la nueva directiva</h1>
+  <p>Espacio abierto para que los vecinos armen listas y otros se sumen — sin necesidad de gritar en el chat.</p>
+  <nav class="tabs">
+    <a href="index.html">Quejas y propuestas</a>
+    <a href="listas.html" class="active">Listas</a>
+  </nav>
+</header>
+
+<main>
+  <div class="intro-card intro-form">
+    <strong>¿Cómo funciona?</strong>
+    Todavía no hay cargos ni fechas fijas. Primero se ven quiénes quieren organizarse.
+    Puedes <strong>proponer una lista</strong> o <strong>sumarte</strong> a una que ya exista.
+    Si te equivocas, usa el enlace “Editar respuesta” que te llega por correo.
+  </div>
+
+  <div class="listas-actions" id="listas-actions">
+    <a class="btn-link btn-primary" id="btn-postular" href="#" target="_blank" rel="noopener">Proponer mi lista →</a>
+    <a class="btn-link" id="btn-sumarse" href="#" target="_blank" rel="noopener">Sumarme a una lista →</a>
+  </div>
+
+  <div class="section-title">Vitrina de listas</div>
+  <p class="section-sub" id="listas-status">Cargando…</p>
+  <div id="listas-grid" class="listas-grid"></div>
+</main>
+
+<footer>
+  Herramienta informal de organización vecinal ·
+  <a href="index.html">Volver a quejas y propuestas</a>
+  <div class="view-count" id="view-count" hidden>vistas: <span>—</span></div>
+</footer>
+
+<script src="config-listas.js"></script>
+<script>
+// Debe coincidir con OPCION_SALIRSE en apps_script_sync_listas.gs
+const OPCION_SALIRSE = '— Ya no estoy en ninguna lista —';
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function norm(s) {
+  return String(s || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function cellText(cell) {
+  if (!cell) return '';
+  if (cell.f != null && cell.f !== '') return String(cell.f);
+  if (cell.v == null) return '';
+  return String(cell.v);
+}
+
+function parseGviz(resp) {
+  if (!resp || resp.status !== 'ok' || !resp.table) return { headers: [], rows: [] };
+  const headers = (resp.table.cols || []).map(c => String((c && c.label) || '').trim());
+  const rows = (resp.table.rows || []).map(row => (row.c || []).map(cellText));
+  return { headers, rows };
+}
+
+function colIndex(headers, predicados) {
+  const preds = Array.isArray(predicados) ? predicados : [predicados];
+  for (let i = 0; i < headers.length; i++) {
+    const h = norm(headers[i]);
+    if (preds.some(p => h.includes(norm(p)))) return i;
+  }
+  return -1;
+}
+
+function pick(row, idx) {
+  return idx >= 0 ? String(row[idx] || '').trim() : '';
+}
+
+/** Si hay columnas duplicadas (ej. texto viejo + dropdown nuevo), toma la última con valor. */
+function pickLastMatching(headers, row, predicados) {
+  const preds = Array.isArray(predicados) ? predicados : [predicados];
+  let value = '';
+  for (let i = 0; i < headers.length; i++) {
+    const h = norm(headers[i]);
+    if (!preds.some(p => h.includes(norm(p)))) continue;
+    const v = String(row[i] || '').trim();
+    if (v) value = v;
+  }
+  return value;
+}
+
+function loadSheet(sheetId, gid) {
+  return new Promise((resolve, reject) => {
+    if (!sheetId) {
+      reject(new Error('Falta configurar la hoja'));
+      return;
+    }
+    const cbName = '__listasCb_' + Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('timeout'));
+    }, 15000);
+
+    function cleanup() {
+      clearTimeout(timeout);
+      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function (resp) {
+      cleanup();
+      try { resolve(parseGviz(resp)); }
+      catch (e) { reject(e); }
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('No se pudo cargar la hoja'));
+    };
+    script.src = 'https://docs.google.com/spreadsheets/d/' + sheetId +
+      '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&gid=' + (gid || '0');
+    document.body.appendChild(script);
+  });
+}
+
+function initialsFrom(name) {
+  const parts = String(name || 'L').trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return 'L';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function avatarColor(name) {
+  const palette = ['#1f3864', '#e0662a', '#1f8a70', '#2e5395', '#b9770e', '#2471a3'];
+  let hash = 0;
+  const s = String(name || '');
+  for (let i = 0; i < s.length; i++) hash = (hash + s.charCodeAt(i) * (i + 1)) % palette.length;
+  return palette[hash];
+}
+
+function splitPeople(text) {
+  return String(text || '')
+    .split(/\n|;|,|\u2022|\-/)
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function findAdhesiones(listName, adhesiones) {
+  const target = norm(listName);
+  return adhesiones.filter(a => {
+    const n = norm(a.lista);
+    return n === target || n.includes(target) || target.includes(n);
+  });
+}
+
+function renderListas(postulaciones, adhesiones) {
+  const status = document.getElementById('listas-status');
+  const grid = document.getElementById('listas-grid');
+
+  if (!postulaciones.length) {
+    status.innerHTML = 'Todavía no hay listas. Sé el primero en proponer una.';
+    grid.innerHTML = `
+      <div class="form-empty">
+        <div class="form-empty-emoji">🗳️</div>
+        <p>Cuando alguien postule, aparecerá aquí automáticamente.</p>
+      </div>`;
+    return;
+  }
+
+  status.innerHTML = `<span class="live-badge">EN VIVO</span> <strong>${postulaciones.length}</strong> lista${postulaciones.length === 1 ? '' : 's'} · se actualiza sola`;
+
+  grid.innerHTML = postulaciones.map((lista, idx) => {
+    const color = avatarColor(lista.nombreLista);
+    const adhesos = findAdhesiones(lista.nombreLista, adhesiones);
+    const integrants = splitPeople(lista.integrantes);
+    const total = new Set([
+      ...integrants.map(norm),
+      ...adhesos.map(a => norm(a.nombre))
+    ].filter(Boolean)).size;
+
+    return `
+      <article class="lista-card" style="--accent:${color}; --delay:${Math.min(idx, 8) * 40}ms">
+        <header class="lista-card-head">
+          <div class="form-avatar" style="background:${color}">${escapeHtml(initialsFrom(lista.nombreLista))}</div>
+          <div class="form-card-who">
+            <strong>${escapeHtml(lista.nombreLista)}</strong>
+            <span>Propuesta por ${escapeHtml(lista.quien)} · ${escapeHtml(lista.mz)}</span>
+          </div>
+          <span class="form-card-num">${total} persona${total === 1 ? '' : 's'}</span>
+        </header>
+
+        <div class="lista-body">
+          <p class="lista-motivation">${escapeHtml(lista.motivacion).replace(/\n/g, '<br>')}</p>
+          ${lista.propuestas ? `<div class="lista-block"><h4>Propuestas</h4><p>${escapeHtml(lista.propuestas).replace(/\n/g, '<br>')}</p></div>` : ''}
+          ${integrants.length ? `<div class="lista-block"><h4>Integrantes iniciales</h4><ul class="lista-people">${integrants.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul></div>` : ''}
+          ${adhesos.length ? `<div class="lista-block"><h4>Se sumaron después</h4><ul class="lista-people">${adhesos.map(a => `<li>${escapeHtml(a.nombre)} <span class="muted">(${escapeHtml(a.mz)})</span>${a.aporte ? ` — ${escapeHtml(a.aporte)}` : ''}</li>`).join('')}</ul></div>` : ''}
+          <div class="lista-meta">📅 ${escapeHtml(lista.fecha)}${lista.contacto ? ` · 📞 ${escapeHtml(lista.contacto)}` : ''}</div>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+function mapPostulaciones(payload) {
+  const headers = payload.headers || [];
+  const rows = payload.rows || [];
+  const iFecha = colIndex(headers, ['timestamp', 'marca temporal']);
+  const iQuien = colIndex(headers, ['tu nombre completo', 'nombre completo']);
+  const iMz = colIndex(headers, ['manzana']);
+  const iLista = colIndex(headers, ['nombre de la lista']);
+  const iIntegrantes = colIndex(headers, ['integrantes']);
+  const iMotivacion = colIndex(headers, ['motivacion', 'motivación']);
+  const iPropuestas = colIndex(headers, ['propuestas principales', 'propuestas']);
+  const iContacto = colIndex(headers, ['contacto']);
+
+  return rows.map(r => ({
+    fecha: pick(r, iFecha),
+    quien: pick(r, iQuien),
+    mz: pick(r, iMz),
+    nombreLista: pickLastMatching(headers, r, ['nombre de la lista']) || pick(r, iLista),
+    integrantes: pick(r, iIntegrantes),
+    motivacion: pick(r, iMotivacion),
+    propuestas: pick(r, iPropuestas),
+    contacto: pick(r, iContacto)
+  })).filter(x => x.nombreLista).reverse();
+}
+
+function mapAdhesiones(payload) {
+  const headers = payload.headers || [];
+  const rows = payload.rows || [];
+  const iFecha = colIndex(headers, ['timestamp', 'marca temporal']);
+  const iNombre = colIndex(headers, ['tu nombre completo', 'nombre completo']);
+  const iMz = colIndex(headers, ['manzana']);
+  const iAporte = colIndex(headers, ['aportar', 'aporte']);
+
+  return rows.map(r => ({
+    fecha: pick(r, iFecha),
+    nombre: pick(r, iNombre),
+    mz: pick(r, iMz),
+    // Importante: tras convertir a dropdown puede haber 2 columnas con el mismo título
+    lista: pickLastMatching(headers, r, ['lista a la que te sumas', 'nombre de la lista']),
+    aporte: pick(r, iAporte)
+  })).filter(x => {
+    if (!x.nombre || !x.lista) return false;
+    // Quienes eligieron "salirse" no aparecen en ninguna lista
+    return norm(x.lista) !== norm(OPCION_SALIRSE);
+  });
+}
+
+async function init() {
+  const btnP = document.getElementById('btn-postular');
+  const btnS = document.getElementById('btn-sumarse');
+  const status = document.getElementById('listas-status');
+
+  if (FORM_POSTULAR_URL) btnP.href = FORM_POSTULAR_URL;
+  else btnP.classList.add('is-disabled');
+
+  if (FORM_SUMARSE_URL) btnS.href = FORM_SUMARSE_URL;
+  else btnS.classList.add('is-disabled');
+
+  if (!listasConfigOk()) {
+    status.innerHTML = 'Falta configurar. Ejecuta <code>apps_script_listas.gs</code> y pega los valores en <code>config-listas.js</code>.';
+    document.getElementById('listas-grid').innerHTML = `
+      <div class="form-empty">
+        <div class="form-empty-emoji">⚙️</div>
+        <p>Los formularios aún no están conectados. Sigue los pasos del archivo <strong>apps_script_listas.gs</strong>.</p>
+      </div>`;
+    return;
+  }
+
+  try {
+    const [rawPostular, rawSumarse] = await Promise.all([
+      loadSheet(SHEET_POSTULAR_ID, SHEET_POSTULAR_GID),
+      SHEET_SUMARSE_ID ? loadSheet(SHEET_SUMARSE_ID, SHEET_SUMARSE_GID) : Promise.resolve([])
+    ]);
+    renderListas(mapPostulaciones(rawPostular), mapAdhesiones(rawSumarse));
+  } catch (e) {
+    status.textContent = 'No se pudieron leer las hojas. Revisa que estén compartidas como “Cualquiera con el enlace → Lector”.';
+  }
+}
+
+init();
+
+// Contador discreto (misma lógica del index)
+(async function trackViews() {
+  const el = document.getElementById('view-count');
+  const num = el ? el.querySelector('span') : null;
+  if (!el || !num) return;
+  const key = 'mrkevinomar-serena-listas-vistas';
+  const already = sessionStorage.getItem('serena_listas_viewed') === '1';
+  const endpoint = already
+    ? 'https://countapi.mileshilliard.com/api/v1/get/' + key
+    : 'https://countapi.mileshilliard.com/api/v1/hit/' + key;
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    if (!already) sessionStorage.setItem('serena_listas_viewed', '1');
+    if (data && data.value != null) {
+      num.textContent = Number(data.value).toLocaleString('es-EC');
+      el.hidden = false;
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

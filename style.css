@@ -438,3 +438,70 @@ footer .view-count {
 
 .badge { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
 .badge.cat { background: var(--navy); color: #fff; }
+
+/* ---------- Listas (vitrina) ---------- */
+.listas-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 22px;
+}
+.btn-link.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.listas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.lista-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border-left: 5px solid var(--accent, var(--navy));
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  animation: form-in 0.35s ease both;
+  animation-delay: var(--delay, 0ms);
+}
+.lista-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 10px;
+  background: linear-gradient(180deg, rgba(247,245,242,0.95), transparent);
+}
+.lista-body { padding: 4px 18px 18px; }
+.lista-motivation {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.lista-block { margin-top: 12px; }
+.lista-block h4 {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.lista-block p { margin: 0; font-size: 0.92rem; line-height: 1.5; }
+.lista-people {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.9rem;
+}
+.lista-people li { margin-bottom: 4px; }
+.lista-people .muted { color: var(--text-muted); font-size: 0.85em; }
+.lista-meta {
+  margin-top: 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+code {
+  background: #eef0f3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
