@@ -305,6 +305,24 @@
    "fecha": "2026-09-15",
    "mz": "General",
    "cita": ""
+  },
+  {
+   "id": "Q35",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "No hay salón cerrado ni climatizado para asambleas: en la reunión del martes ~40 propietarios sin sillas suficientes, calor, mosquitos y mala acústica (pérgolas al aire libre)",
+   "frecuencia": "Alta",
+   "fecha": "2026-09-15",
+   "mz": "Club / áreas sociales",
+   "cita": "\"Los que estaban en la parte de atrás ni siquiera escuchaban bien lo que estaban exponiendo\""
+  },
+  {
+   "id": "Q36",
+   "categoria": "Ruido y convivencia",
+   "resumen": "Preocupación de vecinos frente al club ante un posible salón de eventos/fiestas (matrimonios, quinceaños) por ruido los fines de semana",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "Frente al club",
+   "cita": "\"En la urbanización debe haber paz, tranquilidad\""
   }
  ],
  "propuestas": [
