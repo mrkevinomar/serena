@@ -12,28 +12,28 @@
 <header class="site-header">
   <span class="emoji-big">🏘️</span>
   <h1>¿Qué nos molesta en Serena? ¿Qué proponemos?</h1>
-  <p>Todo lo que hemos hablado en el chat de vecinos, organizado y en español sencillo — para que en dos minutos sepas de qué se trata.</p>
+  <p>Hay dos fuentes: lo que ya se recopiló del chat de WhatsApp, y lo que los propietarios siguen enviando por el formulario.</p>
   <nav class="tabs">
-    <button id="tab-quejas" class="active">😤 Quejas</button>
-    <button id="tab-propuestas">💡 Propuestas</button>
-    <button id="tab-formulario">📩 Formulario <span class="live-dot" title="En vivo desde Google Sheets"></span></button>
+    <button id="tab-quejas" class="active">😤 Quejas del chat</button>
+    <button id="tab-propuestas">💡 Propuestas del chat</button>
+    <button id="tab-formulario">📩 Nuevas del formulario <span class="live-dot" title="En vivo desde Google Sheets"></span></button>
   </nav>
 </header>
 
 <main>
   <div class="intro-card" id="intro-quejas">
-    <strong>¿Qué es esto?</strong> Entre todos hemos escrito más de 1,600 mensajes quejándonos de cosas distintas, pero desordenados es difícil verle la foto completa. Aquí están agrupados por tema — toca cualquier tarjeta para ver el detalle. Los temas con más 🔥 son los que más vecinos han mencionado.
+    <strong>Recopilación del chat.</strong> Se tomaron más de 1,600 mensajes del grupo de WhatsApp, se ordenaron y se agruparon por tema. Los temas con más 🔥 son los que más vecinos mencionaron. Toca una tarjeta para ver el detalle.
   </div>
   <div class="intro-card" id="intro-propuestas" style="display:none;">
-    <strong>Ideas para la nueva directiva.</strong> Estas son las propuestas concretas que ya han salido en el chat. Toca un tema para ver el detalle de cada una.
+    <strong>Recopilación del chat.</strong> Estas son las propuestas concretas que ya habían salido en WhatsApp, organizadas por tema. Toca una tarjeta para ver cada una.
   </div>
   <div class="intro-card" id="intro-formulario" style="display:none;">
-    <strong>Ideas nuevas del formulario.</strong> Esto se actualiza solo desde la hoja de Google Sheets cuando un vecino envía su respuesta. Ahora mismo está conectado al documento de prueba.
+    <strong>Lo que siguen enviando los propietarios.</strong> Cada vez que alguien llena el formulario, aparece aquí automáticamente (conectado a la Google Sheet). Esto es aparte de la recopilación del chat.
   </div>
 
   <div id="catalog-view">
     <div class="section-title" id="main-title">😤 ¿Qué es lo que más nos molesta?</div>
-    <p class="section-sub" id="main-sub">Toca un tema para ver los detalles</p>
+    <p class="section-sub" id="main-sub">Desde el chat de WhatsApp · toca un tema para ver los detalles</p>
 
     <div class="cat-grid" id="cat-grid"></div>
 
@@ -46,7 +46,7 @@
   </div>
 
   <div id="formulario-view" style="display:none;">
-    <div class="section-title">📩 Lo que van escribiendo los vecinos</div>
+    <div class="section-title">📩 Ideas nuevas del formulario</div>
     <p class="section-sub" id="form-status">Cargando desde Google Sheets…</p>
     <div id="form-results"></div>
   </div>
