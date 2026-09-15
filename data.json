@@ -589,6 +589,22 @@
    "detalle": "Correo institucional y/o plataforma con sección de sugerencias que los vecinos puedan votar y priorizar",
    "quien": "Vecino tag 9630",
    "fecha": "2026-09-15"
+  },
+  {
+   "id": "P34",
+   "categoria": "Áreas comunes",
+   "propuesta": "Acondicionar un salón cerrado, techado y climatizado para reuniones de propietarios",
+   "detalle": "Priorizar asambleas y reuniones de socios (no un salón de fiestas). La reunión del martes dejó claro que la pérgola al aire libre no alcanza: falta asientos, se oye mal y hay calor/mosquitos. En Brisana sí existe un área cerrada; en Serena Ritofa dejó solo pérgolas.",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P35",
+   "categoria": "Áreas comunes",
+   "propuesta": "Usar ese salón también como coworking cuando no haya reuniones",
+   "detalle": "En horarios libres, habilitarlo como espacio de trabajo cómodo para propietarios, como en urbanizaciones nuevas.",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
   }
  ]
 }
