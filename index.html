@@ -63,6 +63,7 @@
   Recopilación hecha por vecinos a partir del chat <a href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">CL-SERENA PROPIETARIOS</a>
   · Propuestas nuevas vía <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">formulario</a>
   · Herramienta informal de organización vecinal, no es un canal oficial de la administración.
+  <div class="view-count" id="view-count" hidden>vistas: <span>—</span></div>
 </footer>
 
 <script src="categorias.js"></script>
@@ -342,7 +343,30 @@ function render() {
   renderCatGrid();
 }
 
+async function trackViews() {
+  const el = document.getElementById('view-count');
+  const num = el ? el.querySelector('span') : null;
+  if (!el || !num) return;
+  const key = 'mrkevinomar-serena-vistas';
+  const already = sessionStorage.getItem('serena_viewed') === '1';
+  const endpoint = already
+    ? 'https://countapi.mileshilliard.com/api/v1/get/' + key
+    : 'https://countapi.mileshilliard.com/api/v1/hit/' + key;
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    if (!already) sessionStorage.setItem('serena_viewed', '1');
+    if (data && data.value != null) {
+      num.textContent = Number(data.value).toLocaleString('es-EC');
+      el.hidden = false;
+    }
+  } catch (e) {
+    // Silencioso: el contador es solo informativo
+  }
+}
+
 loadData();
+trackViews();
 </script>
 </body>
 </html>
