@@ -1,0 +1,576 @@
+{
+ "quejas": [
+  {
+   "id": "Q01",
+   "categoria": "Seguridad",
+   "resumen": "La primera garita de acceso a Casa Laguna no filtra ni identifica visitantes ni vehículos sin placa",
+   "frecuencia": "Muy alta",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": "\"Esa garita está por gusto, no hay control en nada, cualquiera puede pasar\""
+  },
+  {
+   "id": "Q02",
+   "categoria": "Seguridad",
+   "resumen": "Sistema de doble pluma genera confusión, demoras y no siempre funciona automáticamente",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-08",
+   "mz": "General",
+   "cita": "\"Las barreras de entrada a la etapa están fuera de servicio\""
+  },
+  {
+   "id": "Q03",
+   "categoria": "Seguridad",
+   "resumen": "Turnos con un solo guardia (especialmente de madrugada)",
+   "frecuencia": "Media",
+   "fecha": "2026-07-19",
+   "mz": "General",
+   "cita": "\"Domingo 2:35am, un solo guardia, cómo es posible\""
+  },
+  {
+   "id": "Q04",
+   "categoria": "Seguridad",
+   "resumen": "Ingreso de personas externas sin control; caso de persona agresiva que amenazó y grabó a una familia y a una menor",
+   "frecuencia": "Media",
+   "fecha": "2026-08-12",
+   "mz": "General",
+   "cita": "\"Debería negarse el ingreso a esa persona\""
+  },
+  {
+   "id": "Q05",
+   "categoria": "Seguridad",
+   "resumen": "Consumo de drogas (marihuana) observado en la zona de garita principal",
+   "frecuencia": "Media",
+   "fecha": "2026-07-23",
+   "mz": "Garita principal",
+   "cita": "\"Repartidores que fuman marihuana en ese tramo, reiteradas veces\""
+  },
+  {
+   "id": "Q06",
+   "categoria": "Seguridad",
+   "resumen": "Robos/daños a vehículos estacionados cerca del comisariato, fuera de garita",
+   "frecuencia": "Baja-media",
+   "fecha": "2026-07-23",
+   "mz": "Garita principal",
+   "cita": "\"Le rompieron un vidrio a un vecino estacionado afuera\""
+  },
+  {
+   "id": "Q07",
+   "categoria": "Seguridad",
+   "resumen": "Vehículos sin placa circulando dentro de la etapa sin ser detenidos",
+   "frecuencia": "Media",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q08",
+   "categoria": "Fauna y plagas",
+   "resumen": "Mosquitos excesivos en áreas sociales, piscina y calles; riesgo de dengue (ya hay casos)",
+   "frecuencia": "Muy alta",
+   "fecha": "2026-06-29",
+   "mz": "General",
+   "cita": "\"Ya hay varias personas con dengue en la ciudadela\""
+  },
+  {
+   "id": "Q09",
+   "categoria": "Fauna y plagas",
+   "resumen": "Alacranes en varias viviendas y áreas verdes",
+   "frecuencia": "Alta",
+   "fecha": "2026-06-29",
+   "mz": "Varias manzanas",
+   "cita": ""
+  },
+  {
+   "id": "Q10",
+   "categoria": "Fauna y plagas",
+   "resumen": "Episodio grave: 3 serpientes/culebras en un parque, respuesta lenta de bomberos/ECU911",
+   "frecuencia": "Alta (evento puntual grave)",
+   "fecha": "2026-07-11",
+   "mz": "Mz2 V28 y parque cercano",
+   "cita": "\"Estamos llenos de serpientes... los bomberos llegaron muy tarde\""
+  },
+  {
+   "id": "Q11",
+   "categoria": "Fauna y plagas",
+   "resumen": "Presencia de ratas",
+   "frecuencia": "Media",
+   "fecha": "2026-08-22",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q12",
+   "categoria": "Fauna y plagas",
+   "resumen": "No existe plan de fumigación general financiado por la administración, solo aplicaciones individuales",
+   "frecuencia": "Muy alta",
+   "fecha": "2026-06-29",
+   "mz": "General",
+   "cita": "\"No veo que intenten controlar esta plaga\""
+  },
+  {
+   "id": "Q13",
+   "categoria": "Alícuota y transparencia",
+   "resumen": "Confusión sobre qué cubre exactamente la alícuota de $65 (jardinería/riego vs. responsabilidad del propietario)",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-02",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q14",
+   "categoria": "Alícuota y transparencia",
+   "resumen": "Falta de informe financiero (activos y pasivos) antes de recibir la administración",
+   "frecuencia": "Alta",
+   "fecha": "2026-08-31",
+   "mz": "General",
+   "cita": "\"Que la administración actual dé un informe certificado de activos y pasivos\""
+  },
+  {
+   "id": "Q15",
+   "categoria": "Alícuota y transparencia",
+   "resumen": "Percepción de que no se ven resultados frente a lo recaudado (~$17,485/mes)",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": "\"Seguimos pagando los $65 pero no obtenemos resultados\""
+  },
+  {
+   "id": "Q16",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "Incertidumbre sobre continuidad del personal/maquinaria de jardinería (Ritofa) tras la entrega",
+   "frecuencia": "Media",
+   "fecha": "2026-07-02",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q17",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "Piscina con cucarachas por falta de mantenimiento regular",
+   "frecuencia": "Media",
+   "fecha": "2026-08-22",
+   "mz": "Piscina",
+   "cita": ""
+  },
+  {
+   "id": "Q18",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "Área de juegos infantiles sucia, sin bancas ni sombra",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "Área de juegos",
+   "cita": ""
+  },
+  {
+   "id": "Q19",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "Gimnasio sin reglamento de limpieza (máquinas quedan con sudor de otros usuarios)",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "Gimnasio",
+   "cita": ""
+  },
+  {
+   "id": "Q20",
+   "categoria": "Mantenimiento áreas comunes",
+   "resumen": "Cancha de fútbol usada por personas ajenas a la urbanización sin control de acceso",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "Cancha de fútbol",
+   "cita": "\"19 personas ajenas ingresaron a jugar la semana pasada\""
+  },
+  {
+   "id": "Q21",
+   "categoria": "Residuos y mascotas",
+   "resumen": "Heces de mascotas no recogidas, dejadas en tachos ajenos, jardineras y parques",
+   "frecuencia": "Muy alta",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q22",
+   "categoria": "Residuos y mascotas",
+   "resumen": "El camión recolector deja los tachos desordenados/abiertos y rompe fundas al separar reciclaje",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q23",
+   "categoria": "Residuos y mascotas",
+   "resumen": "Ladridos nocturnos de perros",
+   "frecuencia": "Media",
+   "fecha": "2026-08-17",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q24",
+   "categoria": "Infraestructura vial",
+   "resumen": "Reductores de velocidad instalados sin señalización ni pintura, dañan vehículos bajos",
+   "frecuencia": "Alta",
+   "fecha": "2026-08-14",
+   "mz": "Vía de salida principal",
+   "cita": "\"Saquen esos vigilantes acostados, si van a poner algo pongan los de plástico\""
+  },
+  {
+   "id": "Q25",
+   "categoria": "Infraestructura vial",
+   "resumen": "Exceso de velocidad de vehículos y motos dentro de la etapa (motivo original de los reductores)",
+   "frecuencia": "Media",
+   "fecha": "2026-08-14",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q26",
+   "categoria": "Infraestructura vial",
+   "resumen": "Vehículos estacionados en áreas verdes, veredas y media calle",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q27",
+   "categoria": "Servicios básicos",
+   "resumen": "Cortes de energía (CNEL) dejan sin funcionamiento las bombas de agua por falta de generador de respaldo",
+   "frecuencia": "Alta",
+   "fecha": "2026-08-11",
+   "mz": "General",
+   "cita": "\"Perder ambos servicios básicos ya es avaricia\""
+  },
+  {
+   "id": "Q28",
+   "categoria": "Servicios básicos",
+   "resumen": "Riesgo de repetir el problema estructural de Soleana (tubería de 2\" insuficiente para la cisterna)",
+   "frecuencia": "Media",
+   "fecha": "2026-08-26",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q29",
+   "categoria": "Ruido y convivencia",
+   "resumen": "Trabajos con taladro fuera de horario razonable (noches/madrugadas/feriados)",
+   "frecuencia": "Media",
+   "fecha": "2026-07-20",
+   "mz": "Varias manzanas",
+   "cita": ""
+  },
+  {
+   "id": "Q30",
+   "categoria": "Comunicación y organización",
+   "resumen": "Múltiples grupos de WhatsApp paralelos generan confusión (Serena, Comunidad, Emprendimientos, grupo no oficial)",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-08",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q31",
+   "categoria": "Comunicación y organización",
+   "resumen": "Filtración de listado de propietarios con nombres y datos de familiares generó controversia de privacidad",
+   "frecuencia": "Media (evento puntual)",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": ""
+  },
+  {
+   "id": "Q32",
+   "categoria": "Comunicación y organización",
+   "resumen": "El grupo se usa mayormente para quejas, sin pasar a la organización de soluciones",
+   "frecuencia": "Alta",
+   "fecha": "2026-07-23",
+   "mz": "General",
+   "cita": "\"Todo es queja. Muy rara vez veo información productiva\""
+  },
+  {
+   "id": "Q33",
+   "categoria": "Uso de vivienda",
+   "resumen": "Daños en la entrega de viviendas (llaves de jardín, mangueras) cobrados injustamente a nuevos propietarios",
+   "frecuencia": "Baja-media",
+   "fecha": "2026-08-21",
+   "mz": "Varias manzanas",
+   "cita": ""
+  },
+  {
+   "id": "Q34",
+   "categoria": "Uso de vivienda",
+   "resumen": "Uso comercial de viviendas pese a que el reglamento exige uso exclusivamente residencial",
+   "frecuencia": "Media",
+   "fecha": "2026-09-15",
+   "mz": "General",
+   "cita": ""
+  }
+ ],
+ "propuestas": [
+  {
+   "id": "P01",
+   "categoria": "Seguridad",
+   "propuesta": "Código QR de acceso por etapa",
+   "detalle": "Similar a Ciudad Celeste/Oasis: cada propietario gestiona los códigos de sus visitas para agilizar el ingreso y mejorar el control",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-07-25"
+  },
+  {
+   "id": "P02",
+   "categoria": "Seguridad",
+   "propuesta": "Control biométrico / reconocimiento facial en accesos",
+   "detalle": "Ya en implementación para gimnasio y áreas comunes; evaluar extender a garitas",
+   "quien": "Directiva/Administración",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P03",
+   "categoria": "Seguridad",
+   "propuesta": "Registro de cédula y placa a todo visitante en garita principal",
+   "detalle": "Actualmente no se retiene ningún dato de quien ingresa como visitante",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-07-23"
+  },
+  {
+   "id": "P04",
+   "categoria": "Seguridad",
+   "propuesta": "CCTV en todo el tramo entre la garita principal y las etapas",
+   "detalle": "Actualmente hay un tramo sin cámaras entre garita 1 y garita de Serena",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-07-25"
+  },
+  {
+   "id": "P05",
+   "categoria": "Seguridad",
+   "propuesta": "Control de vehículos sin placa",
+   "detalle": "Prohibir o impedir el ingreso de autos/motos sin placas visibles",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-07-23"
+  },
+  {
+   "id": "P06",
+   "categoria": "Fumigación",
+   "propuesta": "Plan formal de fumigación periódica financiado con la alícuota",
+   "detalle": "Reemplazar las aplicaciones individuales por un contrato general a cargo de la administración",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-06-29"
+  },
+  {
+   "id": "P07",
+   "categoria": "Fumigación",
+   "propuesta": "Campaña vecinal de fumigación en el perímetro cercano a la cantera",
+   "detalle": "Enfocada en las manzanas periféricas más expuestas a fauna silvestre",
+   "quien": "Vecino tag 3439",
+   "fecha": "2026-07-13"
+  },
+  {
+   "id": "P08",
+   "categoria": "Transparencia financiera",
+   "propuesta": "Informe financiero y de gestión (activos/pasivos) antes de la entrega de administración",
+   "detalle": "Requisito previo para que la nueva directiva reciba la administración con claridad",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-08-31"
+  },
+  {
+   "id": "P09",
+   "categoria": "Transparencia financiera",
+   "propuesta": "Auditoría semestral o anual voluntaria y gratuita",
+   "detalle": "Un vecino contador/auditor certificado se ofreció a realizarla sin costo, a puertas abiertas",
+   "quien": "Vecino contador (tag 9500)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P10",
+   "categoria": "Transparencia financiera",
+   "propuesta": "Todos los gastos respaldados con factura de servicios profesionales",
+   "detalle": "Evitar pagos informales sin soporte documental",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P11",
+   "categoria": "Transparencia financiera",
+   "propuesta": "Asambleas generales periódicas de rendición de cuentas",
+   "detalle": "Espacio formal (no WhatsApp) para revisar contabilidad y aprobar reglamentos",
+   "quien": "Vecino tag 5785",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P12",
+   "categoria": "Organización interna",
+   "propuesta": "Representante voluntario por manzana",
+   "detalle": "Elegido por sus propios vecinos, sin remuneración, como enlace directo con la directiva",
+   "quien": "Vecino tag 1402",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P13",
+   "categoria": "Organización interna",
+   "propuesta": "Comité multidisciplinario de propietarios de apoyo a la directiva",
+   "detalle": "Levantamiento de necesidades, prioridades, costos y responsables desde el inicio",
+   "quien": "Vecino tag 4253",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P14",
+   "categoria": "Organización interna",
+   "propuesta": "Plan de trabajo anual con presupuesto y prioridades definidas",
+   "detalle": "Evitar la gestión reactiva; planificar desde el comienzo de la nueva directiva",
+   "quien": "Vecino tag 4253",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P15",
+   "categoria": "Personal y gastos",
+   "propuesta": "No afiliar directamente al personal (guardias, jardinería) al IESS",
+   "detalle": "Evitar pasivos laborales futuros (desahucio, despido intempestivo); contratar por factura de servicios",
+   "quien": "Vecino tag 2158",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P16",
+   "categoria": "Personal y gastos",
+   "propuesta": "Evaluar contratar 2 personas fijas para jardinería en vez de tercerizar",
+   "detalle": "Podría reducir el costo frente a una empresa externa",
+   "quien": "Vecino tag 7000",
+   "fecha": "2026-07-02"
+  },
+  {
+   "id": "P17",
+   "categoria": "Infraestructura vial",
+   "propuesta": "Retirar o rehacer correctamente los reductores de velocidad",
+   "detalle": "Con señalización, pintura reflectiva y idealmente de material removible (no cemento fijo)",
+   "quien": "Vecino tag 3439 (propuesta de campaña)",
+   "fecha": "2026-08-31"
+  },
+  {
+   "id": "P18",
+   "categoria": "Infraestructura vial",
+   "propuesta": "Control de exceso de velocidad interno",
+   "detalle": "Medidas complementarias a los reductores para no afectar vehículos bajos",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-08-14"
+  },
+  {
+   "id": "P19",
+   "categoria": "Servicios básicos",
+   "propuesta": "Generador de respaldo para las bombas de agua",
+   "detalle": "Evitar que los cortes de luz dejen a toda la etapa sin agua",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-08-15"
+  },
+  {
+   "id": "P20",
+   "categoria": "Servicios básicos",
+   "propuesta": "Plan de contingencia con tanqueros de agua",
+   "detalle": "Como medida temporal mientras se resuelve el respaldo eléctrico",
+   "quien": "Vecino tag 9400",
+   "fecha": "2026-08-26"
+  },
+  {
+   "id": "P21",
+   "categoria": "Servicios básicos",
+   "propuesta": "Revisión técnica de la cisterna y tubería de alimentación",
+   "detalle": "Prevenir el problema estructural ya ocurrido en la etapa vecina Soleana",
+   "quien": "Vecino tag 0716",
+   "fecha": "2026-08-26"
+  },
+  {
+   "id": "P22",
+   "categoria": "Áreas comunes",
+   "propuesta": "Bancas y toldo/sombra en el área de juegos infantiles",
+   "detalle": "Para comodidad de los padres y protección solar de los niños",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P23",
+   "categoria": "Áreas comunes",
+   "propuesta": "Reglamento de uso e higiene del gimnasio",
+   "detalle": "Incluir letrero con normas y exigir limpieza de máquinas tras el uso",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P24",
+   "categoria": "Áreas comunes",
+   "propuesta": "Extender el horario de la piscina hasta las 21:00",
+   "detalle": "Para propietarios que llegan tarde del trabajo",
+   "quien": "Vecino tag 5306",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P25",
+   "categoria": "Áreas comunes",
+   "propuesta": "Control de acceso a la cancha de fútbol para personas ajenas a la etapa",
+   "detalle": "Actualmente ingresan grupos externos sin control ni aporte al mantenimiento",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P26",
+   "categoria": "Áreas comunes",
+   "propuesta": "Tachos exclusivos para heces de mascotas en parques y esquinas",
+   "detalle": "Complemento (no sustituto) de la responsabilidad del dueño de recoger y llevar a su casa",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-07-23"
+  },
+  {
+   "id": "P27",
+   "categoria": "Convivencia y reglamento",
+   "propuesta": "Actualizar el reglamento de convivencia con sanciones graduales",
+   "detalle": "Para heces no recogidas, uso de tachos ajenos y estacionamiento indebido",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-08-18"
+  },
+  {
+   "id": "P28",
+   "categoria": "Convivencia y reglamento",
+   "propuesta": "Reglamento específico de mascotas",
+   "detalle": "Correa obligatoria y revisión de razas restringidas según normativa",
+   "quien": "Vecinos (varios)",
+   "fecha": "2026-06-29"
+  },
+  {
+   "id": "P29",
+   "categoria": "Uso de vivienda",
+   "propuesta": "Sancionar el uso comercial de viviendas",
+   "detalle": "El reglamento hipotecario exige uso exclusivamente residencial",
+   "quien": "Vecino tag 2158",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P30",
+   "categoria": "Uso de vivienda",
+   "propuesta": "No instalar un minimarket administrado por la asociación",
+   "detalle": "Rechazo mayoritario: riesgo de imagen, conflicto de interés y precedente fallido en otra etapa",
+   "quien": "Vecinos (mayoría)",
+   "fecha": "2026-09-15"
+  },
+  {
+   "id": "P31",
+   "categoria": "Emergencias",
+   "propuesta": "Simulacro de evacuación y kit de emergencia por vivienda",
+   "detalle": "Incluir lámparas, mochila de emergencia y punto de encuentro definido",
+   "quien": "Vecino tag 7000",
+   "fecha": "2026-08-24"
+  },
+  {
+   "id": "P32",
+   "categoria": "Emergencias",
+   "propuesta": "Capacitación de guardias en primeros auxilios / RCP",
+   "detalle": "Parte de las exigencias mínimas de un contrato de seguridad",
+   "quien": "Vecino tag 7000",
+   "fecha": "2026-07-11"
+  },
+  {
+   "id": "P33",
+   "categoria": "Comunicación oficial",
+   "propuesta": "Canal oficial de comunicación una vez electa la directiva",
+   "detalle": "Correo institucional y/o plataforma con sección de sugerencias que los vecinos puedan votar y priorizar",
+   "quien": "Vecino tag 9630",
+   "fecha": "2026-09-15"
+  }
+ ]
+}
