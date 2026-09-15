@@ -20,7 +20,73 @@ const CAT_INFO = {
   "Convivencia y reglamento": { emoji: "📜", titulo: "Reglas claras para todos", color: "#6c3483" },
   "Emergencias": { emoji: "🚨", titulo: "Estar listos para una emergencia", color: "#c0392b" },
   "Comunicación oficial": { emoji: "📢", titulo: "Un canal oficial de verdad", color: "#117864" },
+  "Otras ideas del formulario": { emoji: "📝", titulo: "Otras ideas enviadas por el formulario", color: "#555555" },
 };
+
+// Palabras clave para ubicar respuestas del formulario en una categoría de propuestas.
+const CAT_KEYWORDS = {
+  "Seguridad": [
+    "seguridad", "garita", "guardia", "reconocimiento facial", "facial", "qr",
+    "visitante", "acceso", "pluma", "delivery", "motorizado", "placa", "robo",
+    "camara", "cámara", "vigilancia", "ingreso", "control"
+  ],
+  "Áreas comunes": [
+    "piscina", "parque", "gimnasio", "gym", "cancha", "tenis", "area comun",
+    "área común", "areas comunes", "áreas comunes", "infantil", "toldo",
+    "silla", "club", "juegos"
+  ],
+  "Fumigación": [
+    "fumig", "mosquito", "dengue", "plaga", "alacran", "alacrán", "serpiente",
+    "bicho", "insecto"
+  ],
+  "Transparencia financiera": [
+    "transparencia", "alicuota", "alícuota", "cuenta", "auditor", "gasto",
+    "presupuesto", "plata", "dinero", "finanza"
+  ],
+  "Personal y gastos": [
+    "personal", "sueldo", "contrat", "empleado", "administrador", "nómina", "nomina"
+  ],
+  "Organización interna": [
+    "directiva", "comite", "comité", "asamblea", "organiz", "reunion", "reunión", "eleccion", "elección"
+  ],
+  "Servicios básicos": [
+    "agua", "luz", "electric", "corte", "tanque", "bomba", "internet"
+  ],
+  "Infraestructura vial": [
+    "lomo", "via", "vía", "calle", "asfalto", "hueco", "bache", "vereda", "acera"
+  ],
+  "Convivencia y reglamento": [
+    "reglamento", "norma", "ruido", "convivencia", "multa", "sancion", "sanción", "horario"
+  ],
+  "Uso de vivienda": [
+    "parqueo", "estacion", "airbnb", "negocio", "arriendo", "vivienda", "local"
+  ],
+  "Emergencias": [
+    "emergencia", "incendio", "evacuacion", "evacuación", "primeros auxilios", "sismo"
+  ],
+  "Comunicación oficial": [
+    "comunicacion", "comunicación", "oficial", "canal", "aviso", "informacion", "información"
+  ]
+};
+
+function categorizeProposal(text) {
+  const t = String(text || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  let best = "Otras ideas del formulario";
+  let bestScore = 0;
+  Object.keys(CAT_KEYWORDS).forEach(cat => {
+    let score = 0;
+    CAT_KEYWORDS[cat].forEach(kw => {
+      const needle = kw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (t.includes(needle)) score += needle.length > 6 ? 2 : 1;
+    });
+    if (score > bestScore) {
+      bestScore = score;
+      best = cat;
+    }
+  });
+  return best;
+}
 
 function catInfo(cat, tab) {
   const info = CAT_INFO[cat] || { emoji: "📌", titulo: cat, color: "#555" };

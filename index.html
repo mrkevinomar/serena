@@ -26,7 +26,7 @@
     <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
   </div>
   <div class="intro-card" id="intro-propuestas" style="display:none;">
-    <strong>Recopilación del chat.</strong> Estas son las propuestas concretas que ya habían salido en WhatsApp, organizadas por tema. Toca una tarjeta para ver cada una.
+    <strong>Recopilación del chat + formulario.</strong> Incluye las propuestas del WhatsApp y también las que los propietarios siguen enviando por el formulario, ubicadas en su categoría. Toca una tarjeta para ver cada una.
     <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
   </div>
   <div class="intro-card intro-form" id="intro-formulario" style="display:none;">
@@ -83,6 +83,7 @@ const SHEET_ID = '1Nrael36SelwBUBcPOrQbC3nsZjL1eQvPozcRFsZwZNM';
 const SHEET_GID = '781216111';
 
 let DATA = null;
+let DATA_BASE = null; // catálogo del chat, sin mezclar formulario
 let FORM_ROWS = null;
 let currentTab = 'quejas';
 let openCategory = null;
@@ -96,14 +97,55 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+function shortTitle(text, maxLen) {
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= maxLen) return clean;
+  return clean.slice(0, maxLen - 1).trim() + '…';
+}
+
+function formToPropuesta(row) {
+  return {
+    id: row.id,
+    categoria: categorizeProposal(row.propuesta),
+    propuesta: shortTitle(row.propuesta, 140),
+    detalle: row.propuesta,
+    quien: row.quien || 'Vecino/a',
+    fecha: row.fecha || '',
+    fuente: 'formulario'
+  };
+}
+
+function mergeFormIntoPropuestas() {
+  if (!DATA_BASE) return;
+  const base = DATA_BASE.propuestas || [];
+  const fromForm = (FORM_ROWS || []).map(formToPropuesta);
+  DATA = {
+    quejas: DATA_BASE.quejas,
+    propuestas: base.concat(fromForm)
+  };
+}
+
 async function loadData() {
   try {
     const res = await fetch('data.json');
-    DATA = await res.json();
+    DATA_BASE = await res.json();
   } catch (e) {
-    DATA = JSON.parse(document.getElementById('raw-data').textContent || '{}');
+    DATA_BASE = JSON.parse(document.getElementById('raw-data').textContent || '{}');
   }
+  DATA = {
+    quejas: DATA_BASE.quejas || [],
+    propuestas: (DATA_BASE.propuestas || []).slice()
+  };
   render();
+  // Cargar formulario en vivo y mezclarlo en Propuestas
+  try {
+    FORM_ROWS = await loadSheetResponses();
+    mergeFormIntoPropuestas();
+    if (currentTab === 'propuestas') renderCatGrid();
+    if (currentTab === 'formulario') renderFormulario(FORM_ROWS);
+  } catch (e) {
+    // El catálogo del chat sigue disponible aunque falle la hoja
+  }
 }
 
 function cellText(cell) {
@@ -234,13 +276,20 @@ function quejaBubble(item) {
 }
 
 function propuestaBubble(item) {
+  const fromForm = item.fuente === 'formulario';
+  const body = fromForm ? (item.detalle || item.propuesta) : item.propuesta;
+  const extra = (!fromForm && item.detalle) ? item.detalle : '';
   return `
-    <div class="item-bubble">
-      <div><strong>${item.propuesta}</strong></div>
-      ${item.detalle ? `<div class="prop-detail">${item.detalle}</div>` : ''}
+    <div class="item-bubble${fromForm ? ' from-form' : ''}">
+      <div>
+        ${fromForm ? '' : `<strong>${escapeHtml(body)}</strong>`}
+        ${fromForm ? `<div class="form-inline-text">${escapeHtml(body).replace(/\n/g, '<br>')}</div>` : ''}
+        ${fromForm ? '<span class="badge-form">Formulario</span>' : ''}
+      </div>
+      ${extra ? `<div class="prop-detail">${escapeHtml(extra)}</div>` : ''}
       <div class="meta">
-        <span>🙋 ${item.quien}</span>
-        <span>📅 ${item.fecha}</span>
+        <span>🙋 ${escapeHtml(item.quien)}</span>
+        <span>📅 ${escapeHtml(item.fecha)}</span>
       </div>
     </div>`;
 }
@@ -348,6 +397,7 @@ async function showFormulario() {
     </div>`;
   try {
     FORM_ROWS = await loadSheetResponses();
+    mergeFormIntoPropuestas();
     renderFormulario(FORM_ROWS);
   } catch (e) {
     document.getElementById('form-status').textContent =
