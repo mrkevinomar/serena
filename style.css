@@ -279,7 +279,7 @@ main {
   box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 .intro-card strong { color: var(--text); }
-.intro-actions { margin: 14px 0 0; }
+.intro-actions { margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .btn-link {
   display: inline-block;
   text-decoration: none;

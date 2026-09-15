@@ -17,22 +17,31 @@
     <button id="tab-quejas" class="active">😤 Quejas del chat</button>
     <button id="tab-propuestas">💡 Propuestas del chat</button>
     <button id="tab-formulario">📩 Nuevas del formulario <span class="live-dot" title="En vivo desde Google Sheets"></span></button>
-    <a href="listas.html">🗳️ Listas</a>
+    <a href="listas.html" class="tab-listas">🗳️ Listas</a>
   </nav>
 </header>
 
 <main>
   <div class="intro-card" id="intro-quejas">
     <strong>Recopilación del chat.</strong> Se tomaron más de 1,600 mensajes del grupo de WhatsApp, se ordenaron y se agruparon por tema. Los temas con más 🔥 son los que más vecinos mencionaron. Toca una tarjeta para ver el detalle.
-    <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
+    <p class="intro-actions">
+      <a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a>
+      <a class="btn-link btn-primary" href="listas.html">Ver listas / postularme →</a>
+    </p>
   </div>
   <div class="intro-card" id="intro-propuestas" style="display:none;">
     <strong>Recopilación del chat + formulario.</strong> Incluye las propuestas del WhatsApp y también las que los propietarios siguen enviando por el formulario, ubicadas en su categoría. Toca una tarjeta para ver cada una.
-    <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
+    <p class="intro-actions">
+      <a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a>
+      <a class="btn-link btn-primary" href="listas.html">Ver listas / postularme →</a>
+    </p>
   </div>
   <div class="intro-card intro-form" id="intro-formulario" style="display:none;">
     <strong>Lo que siguen enviando los propietarios.</strong> Cada vez que alguien llena el formulario, aparece aquí automáticamente. Esto es aparte de la recopilación del chat.
-    <p class="intro-actions"><a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Enviar mi propuesta →</a></p>
+    <p class="intro-actions">
+      <a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Enviar mi propuesta →</a>
+      <a class="btn-link" href="listas.html">Ir a listas de la directiva →</a>
+    </p>
   </div>
 
   <div id="catalog-view">
@@ -72,6 +81,7 @@
 <footer>
   Recopilación hecha por vecinos a partir del chat <a href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">CL-SERENA PROPIETARIOS</a>
   · Propuestas nuevas vía <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">formulario</a>
+  · <a href="listas.html">Listas para la directiva</a>
   · Herramienta informal de organización vecinal, no es un canal oficial de la administración.
   <div class="view-count" id="view-count" hidden>vistas: <span>—</span></div>
 </footer>
