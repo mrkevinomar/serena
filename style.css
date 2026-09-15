@@ -195,41 +195,14 @@ main {
   border: 1px solid var(--border); font-size: 0.9rem; background: #fff;
 }
 
-/* ---------- CTA floating ---------- */
-.vote-fab {
-  position: fixed; bottom: 20px; right: 20px;
-  background: var(--orange); color: #fff; text-decoration: none;
-  padding: 14px 22px; border-radius: 999px; font-weight: 800; font-size: 0.95rem;
-  box-shadow: 0 6px 18px rgba(224,102,42,0.45);
-  z-index: 50;
-  display: flex; align-items: center; gap: 8px;
-}
-.vote-fab:hover { transform: translateY(-2px); }
-
-.cta-box {
-  background: linear-gradient(135deg, var(--orange) 0%, #f0915a 100%);
-  color: #fff;
-  border-radius: var(--radius);
-  padding: 22px 24px;
-  margin: 26px 0;
-  text-align: center;
-}
-.cta-box h3 { margin: 0 0 6px; }
-.cta-box p { margin: 0 0 14px; opacity: 0.95; font-size: 0.92rem; }
-.cta-box a.btn {
-  background: #fff; color: var(--orange); text-decoration: none; font-weight: 800;
-  padding: 11px 22px; border-radius: 999px; font-size: 0.92rem; display: inline-block;
-}
-
 footer {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.8rem;
-  padding: 30px 20px 90px;
+  padding: 30px 20px 40px;
 }
 
 .empty-msg { text-align: center; color: var(--text-muted); padding: 30px; }
 
-/* generic badge kept for votar.html compatibility */
 .badge { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
 .badge.cat { background: var(--navy); color: #fff; }
