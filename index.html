@@ -23,12 +23,15 @@
 <main>
   <div class="intro-card" id="intro-quejas">
     <strong>Recopilación del chat.</strong> Se tomaron más de 1,600 mensajes del grupo de WhatsApp, se ordenaron y se agruparon por tema. Los temas con más 🔥 son los que más vecinos mencionaron. Toca una tarjeta para ver el detalle.
+    <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
   </div>
   <div class="intro-card" id="intro-propuestas" style="display:none;">
     <strong>Recopilación del chat.</strong> Estas son las propuestas concretas que ya habían salido en WhatsApp, organizadas por tema. Toca una tarjeta para ver cada una.
+    <p class="intro-actions"><a class="btn-link" href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">Entrar al grupo de WhatsApp →</a></p>
   </div>
   <div class="intro-card" id="intro-formulario" style="display:none;">
-    <strong>Lo que siguen enviando los propietarios.</strong> Cada vez que alguien llena el formulario, aparece aquí automáticamente (conectado a la Google Sheet). Esto es aparte de la recopilación del chat.
+    <strong>Lo que siguen enviando los propietarios.</strong> Cada vez que alguien llena el formulario, aparece aquí automáticamente. Esto es aparte de la recopilación del chat.
+    <p class="intro-actions"><a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Enviar mi propuesta →</a></p>
   </div>
 
   <div id="catalog-view">
@@ -49,19 +52,25 @@
     <div class="section-title">📩 Ideas nuevas del formulario</div>
     <p class="section-sub" id="form-status">Cargando desde Google Sheets…</p>
     <div id="form-results"></div>
+    <div class="cta-form">
+      <p>¿Quieres agregar tu idea?</p>
+      <a class="btn-link btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">Abrir formulario de propuestas →</a>
+    </div>
   </div>
 </main>
 
 <footer>
-  Recopilación hecha por vecinos a partir del chat "CL-SERENA PROPIETARIOS" · Herramienta informal de organización vecinal, no es un canal oficial de la administración.
+  Recopilación hecha por vecinos a partir del chat <a href="https://chat.whatsapp.com/KhNi0qiLbnh07KoS2lubIY" target="_blank" rel="noopener">CL-SERENA PROPIETARIOS</a>
+  · Propuestas nuevas vía <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0tv0UpQ9HYFHhV_UMv6kmfiRAs6xwJwv82_WO1buatgJ94g/viewform" target="_blank" rel="noopener">formulario</a>
+  · Herramienta informal de organización vecinal, no es un canal oficial de la administración.
 </footer>
 
 <script src="categorias.js"></script>
 <script src="data.json" type="application/json" id="raw-data"></script>
 <script>
 // Documento de prueba (cambiar este ID cuando usen la hoja real)
-const SHEET_ID = '15Rf8thRWI6DyZUoOto7EwOOB8UHQ88yn0wGGPQM0TgY';
-const SHEET_GID = '0';
+const SHEET_ID = '1Nrael36SelwBUBcPOrQbC3nsZjL1eQvPozcRFsZwZNM';
+const SHEET_GID = '781216111';
 
 let DATA = null;
 let FORM_ROWS = null;
@@ -319,8 +328,8 @@ function switchTab(tab) {
     ? '😤 ¿Qué es lo que más nos molesta?'
     : '💡 ¿Qué proponemos para la nueva directiva?';
   document.getElementById('main-sub').textContent = tab === 'quejas'
-    ? 'Toca un tema para ver los detalles'
-    : 'Toca un tema para ver las propuestas concretas';
+    ? 'Desde el chat de WhatsApp · toca un tema para ver los detalles'
+    : 'Desde el chat de WhatsApp · toca un tema para ver las propuestas concretas';
   renderCatGrid();
 }
 
