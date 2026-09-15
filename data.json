@@ -200,12 +200,12 @@
   },
   {
    "id": "Q23",
-   "categoria": "Residuos y mascotas",
-   "resumen": "Ladridos nocturnos de perros",
-   "frecuencia": "Media",
-   "fecha": "2026-08-17",
-   "mz": "General",
-   "cita": ""
+   "categoria": "Ruido y convivencia",
+   "resumen": "Ladridos fuertes y reiterados de perros (incluso de madrugada); vecinos reportan falta de respuesta de la administración ante audios enviados",
+   "frecuencia": "Alta",
+   "fecha": "2026-09-15",
+   "mz": "Varias manzanas",
+   "cita": "\"Mis vecinos de al lado trajeron tres perros que al escuchar el mínimo ruido hacen un tremendo escándalo. ¡Es una jauría!\""
   },
   {
    "id": "Q24",
@@ -323,6 +323,33 @@
    "fecha": "2026-09-15",
    "mz": "Frente al club",
    "cita": "\"En la urbanización debe haber paz, tranquilidad\""
+  },
+  {
+   "id": "Q37",
+   "categoria": "Ruido y convivencia",
+   "resumen": "Tres perros del vecino inmediato ladran ante el mínimo ruido; se reportó con educación, se gritó a las 12:30 am por no poder dormir, y se enviaron audios al administrador sin respuesta",
+   "frecuencia": "Alta",
+   "fecha": "2026-09-15",
+   "mz": "Colindante (casa a casa)",
+   "cita": "\"Se le envió audios de los ladridos al administrador y no pasó nada. Confío en que en ésta nueva administración sí se les recuerde a la gente mal educada\""
+  },
+  {
+   "id": "Q38",
+   "categoria": "Ruido y convivencia",
+   "resumen": "Dos perros ladran constantemente detrás de la vivienda",
+   "frecuencia": "Alta",
+   "fecha": "2026-09-15",
+   "mz": "Mz 6",
+   "cita": "\"Yo los tengo justo detrás… hay dos perritos que ladran full\""
+  },
+  {
+   "id": "Q39",
+   "categoria": "Ruido y convivencia",
+   "resumen": "Misma molestia por ladridos fuertes; no está claro si es el mismo foco o hay varios en la etapa",
+   "frecuencia": "Alta",
+   "fecha": "2026-09-15",
+   "mz": "Mz 8 / Mz 2",
+   "cita": "\"No sé si es que esos perros ladran tan fuerte que se escucha hasta acá o serán otros, pero por acá la misma situación\""
   }
  ],
  "propuestas": [
